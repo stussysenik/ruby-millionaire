@@ -1,0 +1,66 @@
+<footer class="mt-24 border-t border-aero-700 bg-aero-900/50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <!-- Brand -->
+      <div class="space-y-4">
+        <div class="flex items-center gap-2">
+          <svg class="w-6 h-6 text-accent" viewBox="0 0 32 32" fill="currentColor">
+            <polygon points="16,2 28,10 28,22 16,30 4,22 4,10"/>
+          </svg>
+          <span class="font-display font-bold tracking-wider text-steel-100">AERO<span class="text-accent">PARTS</span></span>
+        </div>
+        <p class="text-sm text-steel-400 leading-relaxed">
+          Premium aerospace-grade components for defense, commercial aviation, and space applications.
+        </p>
+      </div>
+
+      <!-- Products -->
+      <div>
+        <h4 class="font-display text-xs uppercase tracking-widest text-steel-300 mb-4">Products</h4>
+        <ul class="space-y-2 text-sm">
+          <% Category.active.roots.ordered.limit(6).each do |cat| %>
+            <li><%= link_to cat.name, category_path(cat), class: "text-steel-400 hover:text-accent transition-colors" %></li>
+          <% end %>
+        </ul>
+      </div>
+
+      <!-- Company -->
+      <div>
+        <h4 class="font-display text-xs uppercase tracking-widest text-steel-300 mb-4">Certifications</h4>
+        <ul class="space-y-2 text-sm text-steel-400">
+          <li class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-success" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            AS9100D Certified
+          </li>
+          <li class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-success" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            FAA-PMA Approved
+          </li>
+          <li class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-success" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            ITAR Registered
+          </li>
+          <li class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-success" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            MIL-SPEC Compliant
+          </li>
+        </ul>
+      </div>
+
+      <!-- Contact -->
+      <div>
+        <h4 class="font-display text-xs uppercase tracking-widest text-steel-300 mb-4">Support</h4>
+        <ul class="space-y-2 text-sm text-steel-400">
+          <li>sales@aeroparts.pro</li>
+          <li>1-800-AEROPART</li>
+          <li>Mon-Fri 8am-6pm EST</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-12 pt-8 border-t border-aero-700 flex flex-col md:flex-row items-center justify-between gap-4">
+      <p class="text-xs text-steel-400">&copy; <%= Date.current.year %> AeroParts Pro. All rights reserved.</p>
+      <p class="text-xs text-steel-400 font-mono">CAGE Code: 7X4K2 &bull; DUNS: 08-146-2937</p>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,147 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <!-- Breadcrumb -->
+  <div class="flex items-center gap-2 text-sm text-steel-400 mb-8">
+    <%= link_to "Home", root_path, class: "hover:text-accent" %> /
+    <%= link_to "Products", products_path, class: "hover:text-accent" %> /
+    <%= link_to @product.category.name, category_path(@product.category), class: "hover:text-accent" %> /
+    <span class="text-steel-200"><%= @product.name %></span>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+    <!-- Image Gallery -->
+    <div data-controller="gallery">
+      <div class="card-aero aspect-square flex items-center justify-center overflow-hidden" data-gallery-target="main">
+        <% if @product.images.attached? %>
+          <%= image_tag url_for(@product.images.first), class: "w-full h-full object-contain p-4", alt: @product.name, data: { gallery_target: "mainImage" } %>
+        <% else %>
+          <div class="text-center">
+            <svg class="w-32 h-32 mx-auto text-aero-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+            </svg>
+            <p class="text-sm text-steel-400 mt-2 font-mono">No image available</p>
+          </div>
+        <% end %>
+      </div>
+      <% if @product.images.attached? && @product.images.count > 1 %>
+        <div class="flex gap-3 mt-4">
+          <% @product.images.each_with_index do |image, i| %>
+            <button class="w-20 h-20 card-aero overflow-hidden cursor-pointer <%= 'border-accent' if i == 0 %>"
+                    data-action="click->gallery#select"
+                    data-gallery-url-param="<%= url_for(image) %>">
+              <%= image_tag url_for(image.variant(resize_to_fill: [100, 100])), class: "w-full h-full object-cover", alt: "#{@product.name} thumbnail #{i + 1}" %>
+            </button>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Product Info -->
+    <div class="space-y-6">
+      <!-- Header -->
+      <div>
+        <div class="flex items-center gap-2 text-xs font-mono text-steel-400 mb-2">
+          <%= @product.category.name %>
+        </div>
+        <h1 class="font-display text-2xl md:text-3xl font-bold tracking-wider text-steel-100">
+          <%= @product.name %>
+        </h1>
+      </div>
+
+      <!-- Badges -->
+      <div class="flex flex-wrap gap-2">
+        <% if @product.mil_spec.present? %>
+          <span class="badge-mil-spec"><%= @product.mil_spec %></span>
+        <% end %>
+        <% if @product.certification.present? %>
+          <span class="badge-certified"><%= @product.certification %></span>
+        <% end %>
+        <%= stock_badge(@product) %>
+      </div>
+
+      <!-- Price -->
+      <div class="flex items-baseline gap-3">
+        <span class="font-display text-3xl font-bold text-accent"><%= format_price(@product.price_cents) %></span>
+        <% if @product.on_sale? %>
+          <span class="text-lg text-steel-400 line-through"><%= format_price(@product.compare_at_price_cents) %></span>
+        <% end %>
+        <span class="text-sm text-steel-400">per unit</span>
+      </div>
+
+      <!-- Part Numbers -->
+      <div class="card-aero p-4 space-y-2">
+        <div class="grid grid-cols-2 gap-4 text-sm">
+          <div>
+            <span class="font-mono text-xs text-steel-400">PART NUMBER</span>
+            <div class="font-mono font-bold text-steel-100"><%= @product.part_number %></div>
+          </div>
+          <div>
+            <span class="font-mono text-xs text-steel-400">SKU</span>
+            <div class="font-mono font-bold text-steel-100"><%= @product.sku %></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add to Cart -->
+      <% if @product.in_stock? %>
+        <%= form_with url: cart_cart_items_path, method: :post, class: "flex items-center gap-4" do |f| %>
+          <%= f.hidden_field :product_id, value: @product.id %>
+          <div class="flex items-center border border-aero-600 rounded-md" data-controller="quantity">
+            <button type="button" class="px-3 py-3 text-steel-400 hover:text-accent transition-colors cursor-pointer" data-action="click->quantity#decrement">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/></svg>
+            </button>
+            <input type="number" name="quantity" value="1" min="1" max="<%= @product.stock_quantity %>"
+                   class="w-16 text-center bg-transparent text-steel-100 font-mono border-x border-aero-600 py-2 focus:outline-none"
+                   data-quantity-target="input">
+            <button type="button" class="px-3 py-3 text-steel-400 hover:text-accent transition-colors cursor-pointer" data-action="click->quantity#increment">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            </button>
+          </div>
+          <%= f.submit "Add to Cart", class: "btn-primary flex-1" %>
+        <% end %>
+      <% else %>
+        <div class="btn-primary opacity-50 cursor-not-allowed text-center">Out of Stock</div>
+      <% end %>
+
+      <!-- Description -->
+      <% if @product.description.present? %>
+        <div class="prose prose-invert max-w-none">
+          <h3 class="font-display text-sm uppercase tracking-widest text-steel-300 mb-2">Description</h3>
+          <p class="text-sm text-steel-300 leading-relaxed"><%= @product.description %></p>
+        </div>
+      <% end %>
+
+      <!-- Specifications Table -->
+      <div>
+        <h3 class="font-display text-sm uppercase tracking-widest text-steel-300 mb-3">Technical Specifications</h3>
+        <table class="spec-table">
+          <% if @product.material.present? %>
+            <tr><th>Material</th><td><%= @product.material %></td></tr>
+          <% end %>
+          <% if @product.temperature_range %>
+            <tr><th>Temp Range</th><td><%= @product.temperature_range %></td></tr>
+          <% end %>
+          <% if @product.weight_kg.present? %>
+            <tr><th>Weight</th><td><%= @product.weight_kg %> kg</td></tr>
+          <% end %>
+          <% if @product.specifications.present? %>
+            <% @product.specifications.each do |key, value| %>
+              <tr><th><%= key.titleize %></th><td><%= value %></td></tr>
+            <% end %>
+          <% end %>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Related Products -->
+  <% if @related_products.any? %>
+    <section class="mt-16 pt-12 border-t border-aero-700">
+      <h2 class="section-heading text-xl mb-8">Related Components</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <% @related_products.each do |product| %>
+          <%= render "products/card", product: product %>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
+</div>

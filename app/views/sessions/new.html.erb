@@ -1,0 +1,37 @@
+<div class="min-h-[80vh] flex items-center justify-center px-4">
+  <div class="w-full max-w-md">
+    <div class="text-center mb-8">
+      <div class="flex items-center justify-center gap-2 mb-4">
+        <svg class="w-10 h-10 text-accent" viewBox="0 0 32 32" fill="currentColor">
+          <polygon points="16,2 28,10 28,22 16,30 4,22 4,10"/>
+        </svg>
+      </div>
+      <h1 class="font-display text-2xl font-bold tracking-wider text-steel-100">Sign In</h1>
+      <p class="text-sm text-steel-400 mt-1">Access your AeroParts Pro account</p>
+    </div>
+
+    <div class="card-aero p-8">
+      <%= form_with url: session_path, method: :post, class: "space-y-5" do |f| %>
+        <div>
+          <label class="block text-xs font-display uppercase tracking-widest text-steel-400 mb-2">Email Address</label>
+          <%= f.email_field :email_address, class: "input-aero", placeholder: "you@company.com", autofocus: true, autocomplete: "email", required: true %>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <label class="text-xs font-display uppercase tracking-widest text-steel-400">Password</label>
+            <%= link_to "Forgot?", new_password_path, class: "text-xs text-accent hover:text-accent-hover" %>
+          </div>
+          <%= f.password_field :password, class: "input-aero", placeholder: "Enter password", autocomplete: "current-password", required: true %>
+        </div>
+
+        <%= f.submit "Sign In", class: "btn-primary w-full" %>
+      <% end %>
+    </div>
+
+    <p class="text-center text-sm text-steel-400 mt-6">
+      Don't have an account?
+      <%= link_to "Create one", new_registration_path, class: "text-accent hover:text-accent-hover font-bold" %>
+    </p>
+  </div>
+</div>

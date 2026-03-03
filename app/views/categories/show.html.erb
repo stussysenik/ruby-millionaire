@@ -1,0 +1,41 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="flex items-center gap-2 text-sm text-steel-400 mb-6">
+    <%= link_to "Home", root_path, class: "hover:text-accent" %> /
+    <%= link_to "Products", products_path, class: "hover:text-accent" %> /
+    <span class="text-steel-200"><%= @category.name %></span>
+  </div>
+
+  <div class="mb-8">
+    <h1 class="section-heading"><%= @category.name %></h1>
+    <% if @category.description.present? %>
+      <p class="text-steel-400 mt-2 max-w-2xl"><%= @category.description %></p>
+    <% end %>
+  </div>
+
+  <% if @subcategories.any? %>
+    <div class="flex flex-wrap gap-3 mb-8">
+      <% @subcategories.each do |sub| %>
+        <%= link_to sub.name, category_path(sub), class: "btn-secondary btn-sm" %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="flex items-center justify-between mb-6">
+    <span class="text-sm text-steel-400 font-mono"><%= @pagy.count %> parts</span>
+  </div>
+
+  <% if @products.any? %>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <% @products.each do |product| %>
+        <%= render "products/card", product: product %>
+      <% end %>
+    </div>
+    <div class="mt-8">
+      <%== @pagy.series_nav %>
+    </div>
+  <% else %>
+    <div class="card-aero p-12 text-center">
+      <p class="text-steel-400">No products in this category yet.</p>
+    </div>
+  <% end %>
+</div>

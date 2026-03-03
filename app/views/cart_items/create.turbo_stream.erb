@@ -1,0 +1,18 @@
+<%= turbo_stream.replace "cart-count" do %>
+  <turbo-frame id="cart-count">
+    <% if current_cart.total_items > 0 %>
+      <span class="absolute -top-1 -right-1 bg-accent text-aero-950 text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+        <%= current_cart.total_items %>
+      </span>
+    <% end %>
+  </turbo-frame>
+<% end %>
+
+<%= turbo_stream.prepend "flash" do %>
+  <div class="flash-notice flex items-center gap-3 pr-2 shadow-lg max-w-md animate-fade-in" data-controller="flash" data-flash-target="message">
+    <span class="flex-1 text-sm"><%= @cart_item.product.name %> added to cart.</span>
+    <button data-action="click->flash#dismiss" class="p-1 opacity-60 hover:opacity-100 cursor-pointer">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+  </div>
+<% end %>

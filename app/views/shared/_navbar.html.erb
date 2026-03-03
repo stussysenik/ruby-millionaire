@@ -1,0 +1,99 @@
+<nav class="fixed top-0 left-0 right-0 z-50 bg-aero-900/95 backdrop-blur-md border-b border-aero-700" data-controller="mobile-menu">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <div class="flex items-center gap-8">
+        <%= link_to root_path, class: "flex items-center gap-2 group" do %>
+          <svg class="w-8 h-8 text-accent" viewBox="0 0 32 32" fill="currentColor">
+            <polygon points="16,2 28,10 28,22 16,30 4,22 4,10"/>
+          </svg>
+          <span class="font-display font-bold text-lg tracking-wider text-steel-100 group-hover:text-accent transition-colors">
+            AERO<span class="text-accent">PARTS</span>
+          </span>
+        <% end %>
+
+        <!-- Desktop Nav -->
+        <div class="hidden md:flex items-center gap-1">
+          <%= link_to "Catalog", products_path, class: "nav-link" %>
+          <% Category.active.roots.ordered.limit(4).each do |cat| %>
+            <%= link_to cat.name, category_path(cat), class: "nav-link" %>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Right Side -->
+      <div class="flex items-center gap-4">
+        <!-- Search -->
+        <div class="hidden md:block">
+          <%= form_with url: products_path, method: :get, class: "relative", data: { controller: "search", turbo_frame: "_top" } do %>
+            <input type="text" name="q[name_or_sku_or_part_number_cont]" placeholder="Search parts..."
+              class="bg-aero-800 border border-aero-600 text-steel-100 text-sm rounded-md pl-9 pr-4 py-2 w-48 focus:w-64 transition-all placeholder-steel-400 focus:border-accent focus:ring-1 focus:ring-accent/30 outline-none"
+              data-search-target="input" data-action="input->search#debounce">
+            <svg class="absolute left-3 top-2.5 w-4 h-4 text-steel-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+          <% end %>
+        </div>
+
+        <!-- Cart -->
+        <%= link_to cart_path, class: "relative p-2 text-steel-300 hover:text-accent transition-colors" do %>
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+          </svg>
+          <turbo-frame id="cart-count">
+            <% if cart_count > 0 %>
+              <span class="absolute -top-1 -right-1 bg-accent text-aero-950 text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                <%= cart_count %>
+              </span>
+            <% end %>
+          </turbo-frame>
+        <% end %>
+
+        <!-- Account -->
+        <% if authenticated? %>
+          <div class="hidden md:flex items-center gap-3">
+            <% if current_user.admin? %>
+              <%= link_to "Admin", admin_root_path, class: "nav-link text-caution" %>
+            <% end %>
+            <%= link_to "Account", account_profile_path, class: "nav-link" %>
+            <%= button_to "Sign Out", session_path, method: :delete, class: "nav-link cursor-pointer" %>
+          </div>
+        <% else %>
+          <div class="hidden md:flex items-center gap-2">
+            <%= link_to "Sign In", new_session_path, class: "nav-link" %>
+            <%= link_to "Sign Up", new_registration_path, class: "btn-primary btn-sm" %>
+          </div>
+        <% end %>
+
+        <!-- Mobile Menu Button -->
+        <button class="md:hidden p-2 text-steel-300 hover:text-accent" data-action="click->mobile-menu#toggle">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div class="md:hidden hidden bg-aero-900 border-t border-aero-700" data-mobile-menu-target="menu">
+    <div class="px-4 py-4 space-y-2">
+      <%= link_to "Catalog", products_path, class: "block nav-link py-3" %>
+      <% Category.active.roots.ordered.limit(4).each do |cat| %>
+        <%= link_to cat.name, category_path(cat), class: "block nav-link py-3" %>
+      <% end %>
+      <hr class="border-aero-700">
+      <% if authenticated? %>
+        <% if current_user.admin? %>
+          <%= link_to "Admin Dashboard", admin_root_path, class: "block nav-link py-3 text-caution" %>
+        <% end %>
+        <%= link_to "My Account", account_profile_path, class: "block nav-link py-3" %>
+        <%= link_to "My Orders", account_orders_path, class: "block nav-link py-3" %>
+        <%= button_to "Sign Out", session_path, method: :delete, class: "block nav-link py-3 w-full text-left cursor-pointer" %>
+      <% else %>
+        <%= link_to "Sign In", new_session_path, class: "block nav-link py-3" %>
+        <%= link_to "Create Account", new_registration_path, class: "block btn-primary text-center mt-2" %>
+      <% end %>
+    </div>
+  </div>
+</nav>

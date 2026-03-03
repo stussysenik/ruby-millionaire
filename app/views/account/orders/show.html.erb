@@ -1,0 +1,79 @@
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="flex items-center gap-2 text-sm text-steel-400 mb-6">
+    <%= link_to "Orders", account_orders_path, class: "hover:text-accent" %> /
+    <span class="text-steel-200"><%= @order.order_number %></span>
+  </div>
+
+  <div class="flex items-center justify-between mb-8">
+    <div>
+      <h1 class="section-heading text-xl"><%= @order.order_number %></h1>
+      <div class="text-sm text-steel-400 mt-1">Placed <%= @order.created_at.strftime("%B %d, %Y at %I:%M %p") %></div>
+    </div>
+    <%= status_badge(@order.status) %>
+  </div>
+
+  <!-- Status Timeline -->
+  <div class="card-aero p-6 mb-8">
+    <h3 class="font-display text-sm uppercase tracking-widest text-steel-400 mb-4">Order Status</h3>
+    <div class="flex items-center gap-4 overflow-x-auto pb-2">
+      <% @order.status_steps.each_with_index do |step, i| %>
+        <div class="flex items-center gap-2 shrink-0">
+          <div class="status-step-dot <%= i < @order.status_index ? 'status-step-dot-complete' : (i == @order.status_index ? 'status-step-dot-active' : 'status-step-dot-pending') %>"></div>
+          <span class="text-xs font-display uppercase tracking-wider <%= i <= @order.status_index ? 'text-steel-100' : 'text-steel-400' %>"><%= step.titleize %></span>
+        </div>
+        <% if i < @order.status_steps.length - 1 %>
+          <div class="w-8 h-px <%= i < @order.status_index ? 'bg-success' : 'bg-aero-600' %> shrink-0"></div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Order Items -->
+  <div class="card-aero overflow-hidden mb-8">
+    <div class="px-6 py-4 border-b border-aero-700">
+      <h3 class="font-display text-sm uppercase tracking-widest text-steel-300">Items</h3>
+    </div>
+    <% @order.order_items.each do |item| %>
+      <div class="px-6 py-4 border-b border-aero-700/50 flex items-center justify-between">
+        <div>
+          <div class="font-display text-sm font-bold text-steel-100"><%= item.product_name %></div>
+          <div class="text-xs font-mono text-steel-400">SKU: <%= item.product_sku %> &bull; Qty: <%= item.quantity %></div>
+        </div>
+        <div class="font-mono text-steel-100"><%= format_price(item.line_total_cents) %></div>
+      </div>
+    <% end %>
+
+    <div class="px-6 py-4 space-y-2">
+      <div class="flex justify-between text-sm text-steel-400">
+        <span>Subtotal</span>
+        <span><%= format_price(@order.subtotal_cents) %></span>
+      </div>
+      <div class="flex justify-between text-sm text-steel-400">
+        <span>Shipping</span>
+        <span><%= format_price(@order.shipping_cents) %></span>
+      </div>
+      <div class="flex justify-between text-sm text-steel-400">
+        <span>Tax</span>
+        <span><%= format_price(@order.tax_cents) %></span>
+      </div>
+      <div class="flex justify-between font-display font-bold text-steel-100 pt-2 border-t border-aero-700">
+        <span>Total</span>
+        <span class="text-accent"><%= format_price(@order.total_cents) %></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shipping Address -->
+  <% if @order.shipping_line1.present? %>
+    <div class="card-aero p-6">
+      <h3 class="font-display text-sm uppercase tracking-widest text-steel-400 mb-3">Shipping Address</h3>
+      <div class="text-sm text-steel-200 space-y-1">
+        <div><%= @order.shipping_name %></div>
+        <div><%= @order.shipping_line1 %></div>
+        <% if @order.shipping_line2.present? %><div><%= @order.shipping_line2 %></div><% end %>
+        <div><%= @order.shipping_city %>, <%= @order.shipping_state %> <%= @order.shipping_postal_code %></div>
+        <div><%= @order.shipping_country %></div>
+      </div>
+    </div>
+  <% end %>
+</div>

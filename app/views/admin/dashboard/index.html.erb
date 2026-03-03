@@ -1,0 +1,76 @@
+<div class="space-y-8">
+  <h1 class="section-heading">Dashboard</h1>
+
+  <!-- Stats Grid -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <% [
+      ["Revenue", format_price(@total_revenue), "text-success", "M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"],
+      ["Orders", @total_orders.to_s, "text-accent", "M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"],
+      ["Users", @total_users.to_s, "text-caution", "M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"],
+      ["Products", @total_products.to_s, "text-steel-100", "M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"]
+    ].each do |label, value, color, icon| %>
+      <div class="card-aero p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="text-xs font-display uppercase tracking-widest text-steel-400"><%= label %></div>
+            <div class="font-display text-2xl font-bold <%= color %> mt-1"><%= value %></div>
+          </div>
+          <svg class="w-8 h-8 text-aero-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="<%= icon %>"/>
+          </svg>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- Recent Orders -->
+    <div class="card-aero">
+      <div class="px-6 py-4 border-b border-aero-700 flex items-center justify-between">
+        <h2 class="font-display text-sm uppercase tracking-widest text-steel-300">Recent Orders</h2>
+        <%= link_to "View All", admin_orders_path, class: "text-xs text-accent hover:text-accent-hover" %>
+      </div>
+      <% if @recent_orders.any? %>
+        <% @recent_orders.each do |order| %>
+          <%= link_to admin_order_path(order), class: "block px-6 py-3 border-b border-aero-700/50 hover:bg-aero-700/30 transition-colors" do %>
+            <div class="flex items-center justify-between">
+              <div>
+                <span class="font-mono text-xs text-accent"><%= order.order_number %></span>
+                <span class="text-xs text-steel-400 ml-2"><%= order.user.full_name %></span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="font-mono text-sm text-steel-100"><%= format_price(order.total_cents) %></span>
+                <%= status_badge(order.status) %>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      <% else %>
+        <div class="px-6 py-8 text-center text-sm text-steel-400">No orders yet.</div>
+      <% end %>
+    </div>
+
+    <!-- Low Stock -->
+    <div class="card-aero">
+      <div class="px-6 py-4 border-b border-aero-700 flex items-center justify-between">
+        <h2 class="font-display text-sm uppercase tracking-widest text-steel-300">Low Stock Alert</h2>
+        <%= link_to "View All", admin_products_path, class: "text-xs text-accent hover:text-accent-hover" %>
+      </div>
+      <% if @low_stock_products.any? %>
+        <% @low_stock_products.each do |product| %>
+          <%= link_to admin_product_path(product), class: "block px-6 py-3 border-b border-aero-700/50 hover:bg-aero-700/30 transition-colors" do %>
+            <div class="flex items-center justify-between">
+              <div>
+                <span class="text-sm text-steel-100"><%= product.name %></span>
+                <span class="text-xs font-mono text-steel-400 ml-2"><%= product.sku %></span>
+              </div>
+              <span class="badge-low-stock"><%= product.stock_quantity %> left</span>
+            </div>
+          <% end %>
+        <% end %>
+      <% else %>
+        <div class="px-6 py-8 text-center text-sm text-steel-400">All products well stocked.</div>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <title><%= content_for(:title) || "Admin — AeroParts Pro" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= yield :head %>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="min-h-screen bg-aero-950">
+    <!-- Admin Top Nav -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-aero-900 border-b border-aero-700 h-14">
+      <div class="flex items-center justify-between h-full px-6">
+        <div class="flex items-center gap-6">
+          <%= link_to admin_root_path, class: "flex items-center gap-2" do %>
+            <svg class="w-6 h-6 text-accent" viewBox="0 0 32 32" fill="currentColor">
+              <polygon points="16,2 28,10 28,22 16,30 4,22 4,10"/>
+            </svg>
+            <span class="font-display font-bold text-sm tracking-wider text-steel-100">ADMIN</span>
+          <% end %>
+
+          <div class="hidden md:flex items-center gap-1">
+            <%= link_to "Dashboard", admin_root_path, class: "nav-link text-[11px]" %>
+            <%= link_to "Products", admin_products_path, class: "nav-link text-[11px]" %>
+            <%= link_to "Categories", admin_categories_path, class: "nav-link text-[11px]" %>
+            <%= link_to "Orders", admin_orders_path, class: "nav-link text-[11px]" %>
+            <%= link_to "Users", admin_users_path, class: "nav-link text-[11px]" %>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <%= link_to "View Store", root_path, class: "text-xs text-steel-400 hover:text-accent transition-colors" %>
+          <%= button_to "Sign Out", session_path, method: :delete, class: "text-xs text-steel-400 hover:text-accent transition-colors cursor-pointer" %>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Flash -->
+    <%= render "shared/flash" %>
+
+    <!-- Main Content -->
+    <main class="pt-14">
+      <div class="p-6">
+        <%= yield %>
+      </div>
+    </main>
+  </body>
+</html>

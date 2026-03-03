@@ -1,0 +1,97 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="flex items-center gap-2 text-sm text-steel-400 mb-6">
+    <%= link_to "Home", root_path, class: "hover:text-accent" %> /
+    <span class="text-steel-200">All Products</span>
+  </div>
+
+  <div class="flex flex-col lg:flex-row gap-8">
+    <!-- Sidebar Filters -->
+    <aside class="lg:w-64 shrink-0">
+      <div class="card-aero p-5 sticky top-24 space-y-6" data-controller="filter">
+        <h3 class="font-display text-sm uppercase tracking-widest text-steel-100">Filters</h3>
+
+        <%= search_form_for @q, url: products_path, html: { data: { turbo_action: "advance" } } do |f| %>
+          <!-- Search -->
+          <div class="space-y-2">
+            <label class="text-xs font-display uppercase tracking-widest text-steel-400">Search</label>
+            <%= f.search_field :name_or_sku_or_part_number_cont,
+              class: "input-aero text-sm",
+              placeholder: "Name, SKU, or PN..." %>
+          </div>
+
+          <!-- Category -->
+          <div class="space-y-2 mt-4">
+            <label class="text-xs font-display uppercase tracking-widest text-steel-400">Category</label>
+            <select name="category_id" class="select-aero text-sm" data-action="change->filter#submit">
+              <option value="">All Categories</option>
+              <% @categories.each do |cat| %>
+                <option value="<%= cat.id %>" <%= 'selected' if params[:category_id] == cat.id.to_s %>><%= cat.name %></option>
+                <% cat.children.active.ordered.each do |child| %>
+                  <option value="<%= child.id %>" <%= 'selected' if params[:category_id] == child.id.to_s %>>&nbsp;&nbsp;<%= child.name %></option>
+                <% end %>
+              <% end %>
+            </select>
+          </div>
+
+          <!-- Material -->
+          <div class="space-y-2 mt-4">
+            <label class="text-xs font-display uppercase tracking-widest text-steel-400">Material</label>
+            <%= f.search_field :material_cont, class: "input-aero text-sm", placeholder: "e.g. Titanium" %>
+          </div>
+
+          <!-- Certification -->
+          <div class="space-y-2 mt-4">
+            <label class="text-xs font-display uppercase tracking-widest text-steel-400">Certification</label>
+            <%= f.search_field :certification_cont, class: "input-aero text-sm", placeholder: "e.g. AS9100D" %>
+          </div>
+
+          <!-- Sort -->
+          <div class="space-y-2 mt-4">
+            <label class="text-xs font-display uppercase tracking-widest text-steel-400">Sort By</label>
+            <select name="q[s]" class="select-aero text-sm" data-action="change->filter#submit">
+              <option value="name asc" <%= 'selected' if @q.sorts.map(&:to_s).include?('name asc') %>>Name A-Z</option>
+              <option value="name desc" <%= 'selected' if @q.sorts.map(&:to_s).include?('name desc') %>>Name Z-A</option>
+              <option value="price_cents asc" <%= 'selected' if @q.sorts.map(&:to_s).include?('price_cents asc') %>>Price: Low to High</option>
+              <option value="price_cents desc" <%= 'selected' if @q.sorts.map(&:to_s).include?('price_cents desc') %>>Price: High to Low</option>
+              <option value="created_at desc" <%= 'selected' if @q.sorts.map(&:to_s).include?('created_at desc') %>>Newest First</option>
+            </select>
+          </div>
+
+          <div class="mt-6 flex gap-2">
+            <%= f.submit "Apply", class: "btn-primary btn-sm flex-1" %>
+            <%= link_to "Reset", products_path, class: "btn-secondary btn-sm flex-1 text-center" %>
+          </div>
+        <% end %>
+      </div>
+    </aside>
+
+    <!-- Product Grid -->
+    <div class="flex-1">
+      <div class="flex items-center justify-between mb-6">
+        <h1 class="section-heading text-xl">Products</h1>
+        <span class="text-sm text-steel-400 font-mono"><%= @pagy.count %> parts found</span>
+      </div>
+
+      <% if @products.any? %>
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+          <% @products.each do |product| %>
+            <%= render "products/card", product: product %>
+          <% end %>
+        </div>
+
+        <div class="mt-8">
+          <%== @pagy.series_nav %>
+        </div>
+      <% else %>
+        <div class="card-aero p-12 text-center">
+          <svg class="w-16 h-16 mx-auto text-aero-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+          <h3 class="font-display text-lg text-steel-300">No parts found</h3>
+          <p class="text-sm text-steel-400 mt-1">Try adjusting your search or filter criteria.</p>
+          <%= link_to "Clear Filters", products_path, class: "btn-primary btn-sm mt-4" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

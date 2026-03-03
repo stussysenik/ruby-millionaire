@@ -1,0 +1,70 @@
+<div class="space-y-6">
+  <div class="flex items-center justify-between">
+    <div>
+      <div class="flex items-center gap-2 text-sm text-steel-400 mb-2">
+        <%= link_to "Products", admin_products_path, class: "hover:text-accent" %> /
+        <span class="text-steel-200"><%= @product.name %></span>
+      </div>
+      <h1 class="section-heading text-xl"><%= @product.name %></h1>
+    </div>
+    <div class="flex gap-2">
+      <%= link_to "Edit", edit_admin_product_path(@product), class: "btn-primary btn-sm" %>
+      <%= link_to "View on Store", product_path(@product), class: "btn-secondary btn-sm", target: "_blank" %>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2 space-y-6">
+      <div class="card-aero p-6">
+        <h3 class="font-display text-sm uppercase tracking-widest text-steel-400 mb-4">Product Details</h3>
+        <table class="spec-table">
+          <tr><th>SKU</th><td class="font-mono"><%= @product.sku %></td></tr>
+          <tr><th>Part Number</th><td class="font-mono"><%= @product.part_number %></td></tr>
+          <tr><th>Category</th><td><%= @product.category.name %></td></tr>
+          <tr><th>Price</th><td class="font-mono"><%= format_price(@product.price_cents) %></td></tr>
+          <tr><th>Stock</th><td><%= @product.stock_quantity %></td></tr>
+          <tr><th>Material</th><td><%= @product.material %></td></tr>
+          <tr><th>MIL-SPEC</th><td><%= @product.mil_spec %></td></tr>
+          <tr><th>Certification</th><td><%= @product.certification %></td></tr>
+          <tr><th>Temp Range</th><td><%= @product.temperature_range %></td></tr>
+        </table>
+      </div>
+
+      <% if @product.description.present? %>
+        <div class="card-aero p-6">
+          <h3 class="font-display text-sm uppercase tracking-widest text-steel-400 mb-3">Description</h3>
+          <p class="text-sm text-steel-300"><%= @product.description %></p>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="space-y-6">
+      <div class="card-aero p-6">
+        <h3 class="font-display text-sm uppercase tracking-widest text-steel-400 mb-4">Status</h3>
+        <div class="space-y-3">
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-steel-400">Active</span>
+            <span class="<%= @product.active? ? 'badge-in-stock' : 'badge-out-of-stock' %>"><%= @product.active? ? 'Yes' : 'No' %></span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-steel-400">Featured</span>
+            <span class="<%= @product.featured? ? 'badge-certified' : 'badge-out-of-stock' %>"><%= @product.featured? ? 'Yes' : 'No' %></span>
+          </div>
+        </div>
+      </div>
+
+      <% if @product.images.attached? %>
+        <div class="card-aero p-6">
+          <h3 class="font-display text-sm uppercase tracking-widest text-steel-400 mb-4">Images (<%= @product.images.count %>)</h3>
+          <div class="grid grid-cols-2 gap-2">
+            <% @product.images.each do |image| %>
+              <div class="aspect-square bg-aero-700/30 rounded-md overflow-hidden">
+                <%= image_tag url_for(image.variant(resize_to_fill: [200, 200])), class: "w-full h-full object-cover" %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,38 @@
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <h1 class="section-heading mb-8">Edit Profile</h1>
+
+  <div class="max-w-lg">
+    <div class="card-aero p-8">
+      <%= form_with model: @user, url: account_profile_path, method: :patch, class: "space-y-5" do |f| %>
+        <% if @user.errors.any? %>
+          <div class="flash-alert text-sm">
+            <% @user.errors.full_messages.each do |msg| %>
+              <div><%= msg %></div>
+            <% end %>
+          </div>
+        <% end %>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-display uppercase tracking-widest text-steel-400 mb-2">First Name</label>
+            <%= f.text_field :first_name, class: "input-aero" %>
+          </div>
+          <div>
+            <label class="block text-xs font-display uppercase tracking-widest text-steel-400 mb-2">Last Name</label>
+            <%= f.text_field :last_name, class: "input-aero" %>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-display uppercase tracking-widest text-steel-400 mb-2">Phone</label>
+          <%= f.telephone_field :phone, class: "input-aero", placeholder: "+1 (555) 000-0000" %>
+        </div>
+
+        <div class="flex gap-4">
+          <%= f.submit "Save Changes", class: "btn-primary" %>
+          <%= link_to "Cancel", account_profile_path, class: "btn-secondary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

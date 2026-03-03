@@ -1,0 +1,53 @@
+<div class="space-y-6">
+  <div class="flex items-center justify-between">
+    <h1 class="section-heading">Categories</h1>
+    <%= link_to "New Category", new_admin_category_path, class: "btn-primary btn-sm" %>
+  </div>
+
+  <div class="card-aero overflow-hidden">
+    <table class="table-aero">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Slug</th>
+          <th>Products</th>
+          <th>Position</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @categories.each do |category| %>
+          <tr>
+            <td class="font-bold text-steel-100"><%= category.name %></td>
+            <td class="font-mono text-xs"><%= category.slug %></td>
+            <td><%= category.products.count %></td>
+            <td><%= category.position %></td>
+            <td>
+              <span class="<%= category.active? ? 'badge-in-stock' : 'badge-out-of-stock' %>"><%= category.active? ? 'Active' : 'Inactive' %></span>
+            </td>
+            <td class="text-right space-x-2">
+              <%= link_to "Edit", edit_admin_category_path(category), class: "text-xs text-accent hover:text-accent-hover" %>
+              <%= button_to "Delete", admin_category_path(category), method: :delete, class: "text-xs text-danger hover:text-danger/80 cursor-pointer", data: { turbo_confirm: "Delete #{category.name}?" } %>
+            </td>
+          </tr>
+          <% category.children.ordered.each do |child| %>
+            <tr class="bg-aero-800/30">
+              <td class="font-bold text-steel-200 pl-8">&mdash; <%= child.name %></td>
+              <td class="font-mono text-xs"><%= child.slug %></td>
+              <td><%= child.products.count %></td>
+              <td><%= child.position %></td>
+              <td>
+                <span class="<%= child.active? ? 'badge-in-stock' : 'badge-out-of-stock' %>"><%= child.active? ? 'Active' : 'Inactive' %></span>
+              </td>
+              <td class="text-right space-x-2">
+                <%= link_to "Edit", edit_admin_category_path(child), class: "text-xs text-accent hover:text-accent-hover" %>
+                <%= button_to "Delete", admin_category_path(child), method: :delete, class: "text-xs text-danger hover:text-danger/80 cursor-pointer", data: { turbo_confirm: "Delete #{child.name}?" } %>
+              </td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

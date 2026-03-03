@@ -1,0 +1,15 @@
+<%= turbo_stream.remove dom_id(@cart_item) %>
+
+<%= turbo_stream.replace "cart-count" do %>
+  <turbo-frame id="cart-count">
+    <% if current_cart.total_items > 0 %>
+      <span class="absolute -top-1 -right-1 bg-accent text-aero-950 text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+        <%= current_cart.total_items %>
+      </span>
+    <% end %>
+  </turbo-frame>
+<% end %>
+
+<%= turbo_stream.replace "cart-subtotal" do %>
+  <span id="cart-subtotal" class="font-display font-bold text-accent text-xl"><%= format_price(current_cart.subtotal_cents) %></span>
+<% end %>

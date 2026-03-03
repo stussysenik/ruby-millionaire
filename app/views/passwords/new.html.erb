@@ -1,0 +1,23 @@
+<div class="min-h-[80vh] flex items-center justify-center px-4">
+  <div class="w-full max-w-md">
+    <div class="text-center mb-8">
+      <h1 class="font-display text-2xl font-bold tracking-wider text-steel-100">Reset Password</h1>
+      <p class="text-sm text-steel-400 mt-1">Enter your email to receive reset instructions</p>
+    </div>
+
+    <div class="card-aero p-8">
+      <%= form_with url: passwords_path, class: "space-y-5" do |f| %>
+        <div>
+          <label class="block text-xs font-display uppercase tracking-widest text-steel-400 mb-2">Email Address</label>
+          <%= f.email_field :email_address, class: "input-aero", placeholder: "you@company.com", autofocus: true, required: true %>
+        </div>
+
+        <%= f.submit "Send Reset Instructions", class: "btn-primary w-full" %>
+      <% end %>
+    </div>
+
+    <p class="text-center text-sm text-steel-400 mt-6">
+      <%= link_to "Back to Sign In", new_session_path, class: "text-accent hover:text-accent-hover" %>
+    </p>
+  </div>
+</div>

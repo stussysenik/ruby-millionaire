@@ -1,0 +1,63 @@
+<div class="space-y-6">
+  <div class="flex items-center justify-between">
+    <h1 class="section-heading">Products</h1>
+    <%= link_to "New Product", new_admin_product_path, class: "btn-primary btn-sm" %>
+  </div>
+
+  <!-- Search -->
+  <div class="card-aero p-4">
+    <%= search_form_for @q, url: admin_products_path, html: { class: "flex gap-4 items-end" } do |f| %>
+      <div class="flex-1">
+        <%= f.search_field :name_or_sku_or_part_number_cont, class: "input-aero text-sm", placeholder: "Search by name, SKU, or part number..." %>
+      </div>
+      <%= f.submit "Search", class: "btn-primary btn-sm" %>
+      <%= link_to "Clear", admin_products_path, class: "btn-secondary btn-sm" %>
+    <% end %>
+  </div>
+
+  <!-- Products Table -->
+  <div class="card-aero overflow-hidden">
+    <table class="table-aero">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>SKU</th>
+          <th>Category</th>
+          <th>Price</th>
+          <th>Stock</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @products.each do |product| %>
+          <tr>
+            <td>
+              <div class="font-bold text-steel-100 text-sm"><%= product.name %></div>
+              <div class="text-xs font-mono text-steel-400">PN: <%= product.part_number %></div>
+            </td>
+            <td class="font-mono text-xs"><%= product.sku %></td>
+            <td class="text-sm"><%= product.category.name %></td>
+            <td class="font-mono text-sm"><%= format_price(product.price_cents) %></td>
+            <td><%= stock_badge(product) %></td>
+            <td>
+              <% if product.active? %>
+                <span class="badge-in-stock">Active</span>
+              <% else %>
+                <span class="badge-out-of-stock">Inactive</span>
+              <% end %>
+            </td>
+            <td class="text-right space-x-2">
+              <%= link_to "Edit", edit_admin_product_path(product), class: "text-xs text-accent hover:text-accent-hover" %>
+              <%= button_to "Delete", admin_product_path(product), method: :delete, class: "text-xs text-danger hover:text-danger/80 cursor-pointer", data: { turbo_confirm: "Delete #{product.name}?" } %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mt-4">
+    <%== @pagy.series_nav %>
+  </div>
+</div>

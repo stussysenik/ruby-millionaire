@@ -1,0 +1,42 @@
+<div class="space-y-6">
+  <h1 class="section-heading">Users</h1>
+
+  <div class="card-aero overflow-hidden">
+    <table class="table-aero">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Orders</th>
+          <th>Joined</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+          <tr>
+            <td class="font-bold text-steel-100 text-sm"><%= user.full_name %></td>
+            <td class="font-mono text-xs"><%= user.email_address %></td>
+            <td>
+              <% if user.admin? %>
+                <span class="badge bg-caution/10 text-caution border border-caution/30">Admin</span>
+              <% else %>
+                <span class="badge bg-aero-600/30 text-steel-300 border border-aero-600">Customer</span>
+              <% end %>
+            </td>
+            <td><%= user.orders.count %></td>
+            <td class="text-xs text-steel-400"><%= user.created_at.strftime("%b %d, %Y") %></td>
+            <td class="text-right">
+              <%= link_to "View", admin_user_path(user), class: "text-xs text-accent hover:text-accent-hover" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mt-4">
+    <%== @pagy.series_nav %>
+  </div>
+</div>

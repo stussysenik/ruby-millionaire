@@ -1,0 +1,133 @@
+<!-- Hero Section -->
+<section class="relative overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-br from-aero-950 via-aero-900 to-aero-800"></div>
+  <div class="absolute inset-0 blueprint-bg opacity-50"></div>
+  <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-accent/5 to-transparent"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
+    <div class="max-w-3xl">
+      <div class="flex items-center gap-3 mb-6">
+        <span class="badge-certified">AS9100D Certified</span>
+        <span class="badge-mil-spec">MIL-SPEC</span>
+      </div>
+
+      <h1 class="text-4xl md:text-6xl font-display font-bold tracking-wider text-steel-100 mb-6 leading-tight">
+        PRECISION<br>
+        <span class="text-accent">AEROSPACE</span><br>
+        COMPONENTS
+      </h1>
+
+      <p class="text-lg text-steel-300 leading-relaxed mb-8 max-w-xl">
+        Flight-critical fasteners, seals, bearings, and avionics components.
+        Every part traceable. Every spec verified. Zero compromise.
+      </p>
+
+      <div class="flex flex-wrap gap-4">
+        <%= link_to products_path, class: "btn-primary text-base px-8 py-4" do %>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+          </svg>
+          Browse Catalog
+        <% end %>
+        <%= link_to new_registration_path, class: "btn-secondary text-base px-8 py-4" do %>
+          Request Quote
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Trust Badges -->
+<section class="border-y border-aero-700 bg-aero-900/50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+      <% [
+        ["AS9100D", "Quality Management", "M9 2a1 1 0 00-.894.553L6.382 7H3a1 1 0 000 2h.5l.5 9a2 2 0 002 2h8a2 2 0 002-2l.5-9H17a1 1 0 100-2h-3.382l-1.724-4.447A1 1 0 0011 2H9z"],
+        ["FAA-PMA", "Parts Approval", "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"],
+        ["ITAR", "Registered Facility", "M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"],
+        ["MIL-SPEC", "Military Standards", "M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 2h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 8.172V3L8 2z"]
+      ].each do |title, subtitle, icon_path| %>
+        <div class="flex items-center gap-3 group">
+          <div class="w-10 h-10 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
+            <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="<%= icon_path %>"/>
+            </svg>
+          </div>
+          <div>
+            <div class="font-display text-sm font-bold tracking-wider text-steel-100"><%= title %></div>
+            <div class="text-xs text-steel-400"><%= subtitle %></div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Products -->
+<% if @featured_products.any? %>
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+  <div class="flex items-center justify-between mb-10">
+    <div>
+      <h2 class="section-heading">Featured Components</h2>
+      <p class="text-steel-400 mt-2">Mission-critical parts ready to ship</p>
+    </div>
+    <%= link_to "View All", products_path, class: "btn-secondary btn-sm hidden md:inline-flex" %>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <% @featured_products.each do |product| %>
+      <%= render "products/card", product: product %>
+    <% end %>
+  </div>
+</section>
+<% end %>
+
+<!-- Categories -->
+<% if @categories.any? %>
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+  <div class="text-center mb-10">
+    <h2 class="section-heading">Product Categories</h2>
+    <p class="text-steel-400 mt-2">Browse by component type</p>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <% @categories.each do |category| %>
+      <%= link_to category_path(category), class: "card-aero metallic-hover p-6 group" do %>
+        <div class="flex items-start justify-between">
+          <div>
+            <h3 class="font-display text-lg font-bold tracking-wider text-steel-100 group-hover:text-accent transition-colors">
+              <%= category.name %>
+            </h3>
+            <p class="text-sm text-steel-400 mt-1 line-clamp-2"><%= category.description %></p>
+            <div class="mt-3 text-xs text-steel-400 font-mono">
+              <%= category.products.active.count %> parts available
+            </div>
+          </div>
+          <svg class="w-5 h-5 text-steel-400 group-hover:text-accent group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</section>
+<% end %>
+
+<!-- Stats Banner -->
+<section class="border-y border-aero-700 bg-aero-900/50 mt-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+      <% [
+        [number_with_delimiter(@products_count), "Parts in Catalog"],
+        [@categories_count.to_s, "Categories"],
+        ["99.7%", "On-Time Delivery"],
+        ["24hr", "Quote Turnaround"]
+      ].each do |value, label| %>
+        <div>
+          <div class="font-display text-3xl font-bold text-accent"><%= value %></div>
+          <div class="text-sm text-steel-400 mt-1"><%= label %></div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>

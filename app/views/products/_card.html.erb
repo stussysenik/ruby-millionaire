@@ -1,0 +1,38 @@
+<%= link_to product_path(product), class: "card-aero metallic-hover group block" do %>
+  <!-- Image -->
+  <div class="aspect-square bg-aero-700/30 relative overflow-hidden">
+    <% if product.images.attached? %>
+      <%= image_tag product_image_url(product, variant: :thumb), class: "w-full h-full object-cover", alt: product.name %>
+    <% else %>
+      <div class="w-full h-full flex items-center justify-center">
+        <svg class="w-16 h-16 text-aero-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+        </svg>
+      </div>
+    <% end %>
+    <% if product.on_sale? %>
+      <span class="absolute top-2 left-2 bg-danger text-white text-xs font-bold px-2 py-1 rounded">SALE</span>
+    <% end %>
+    <% if product.mil_spec.present? %>
+      <span class="absolute top-2 right-2 badge-mil-spec text-[10px]"><%= product.mil_spec %></span>
+    <% end %>
+  </div>
+
+  <!-- Info -->
+  <div class="p-4 space-y-2">
+    <div class="text-xs font-mono text-steel-400"><%= product.category.name %></div>
+    <h3 class="font-display text-sm font-bold tracking-wider text-steel-100 group-hover:text-accent transition-colors line-clamp-2">
+      <%= product.name %>
+    </h3>
+    <div class="text-xs font-mono text-steel-400">PN: <%= product.part_number %></div>
+    <div class="flex items-center justify-between pt-2">
+      <div>
+        <span class="font-display font-bold text-accent"><%= format_price(product.price_cents) %></span>
+        <% if product.on_sale? %>
+          <span class="text-xs text-steel-400 line-through ml-1"><%= format_price(product.compare_at_price_cents) %></span>
+        <% end %>
+      </div>
+      <%= stock_badge(product) %>
+    </div>
+  </div>
+<% end %>
