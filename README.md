@@ -1,5 +1,7 @@
 # README
 
+- edit: trying to prompt LLM to code me a 40k per month generating website
+
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
