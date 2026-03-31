@@ -1,26 +1,19 @@
-# README
+# ruby-millionaire
 
-- edit: trying to prompt LLM to code me a 40k per month generating website
+AeroParts Pro — Aerospace e-commerce store built with Rails 8.1.2, Tailwind CSS 4, Hotwire, and Stripe
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+![HTML](https://img.shields.io/badge/HTML-E34F26?style=flat-square&logo=html&logoColor=white)
 
-Things you may want to cover:
+## About
 
-* Ruby version
+📦 **Project** built with HTML / CSS / JS.
 
-* System dependencies
+<!-- 
+  Add a demo GIF here:
+  ![Demo](demo.gif)
+-->
 
-* Configuration
 
-* Database creation
+---
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+*Built by [@stussysenik](https://github.com/stussysenik)*
